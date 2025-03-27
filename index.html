@@ -1,0 +1,35 @@
+<html>
+<head>
+    <title>Job Recommendation System</title>
+</head>
+<body>
+    <h1>Enter Your Skills</h1>
+    <input type="text" id="skills" placeholder="Enter skills">
+<br>
+</br>
+
+    <button onclick="getRecommendations()">Get Recommendations</button>
+    <ul id="results"></ul>
+
+    <script>
+        function getRecommendations() {
+            let skills = document.getElementById("skills").value.split(",");
+            fetch('/recommend', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ skills: skills })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let results = document.getElementById("results");
+                results.innerHTML = "";
+                data.forEach(job => {
+                    let li = document.createElement("li");
+                    li.textContent = job.title + " - " + job.company;
+                    results.appendChild(li);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
